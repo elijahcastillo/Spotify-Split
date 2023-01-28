@@ -1,0 +1,112 @@
+{% extends "base.html" %} {% block head %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/split.css') }}"
+/>
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/choosePlaylist.css') }}"
+/>
+{% endblock head %} {% block content %}
+
+<div class="container" style="max-width: 90%">
+  <div class="splitWrapper">
+    <div class="track-info">
+      <div class="trackWrapper" id="tr">
+        <div class="track-media">
+          <img src="" id="album_art" />
+          <audio controls class="audio" id="audio">
+            <source src="" type="audio/mp3" id="mp3_src" />
+            Your browser does not support the audio element.
+          </audio>
+        </div>
+        <div class="track-data">
+          <div>
+            <h1 id="track_title"></h1>
+            <p id="track_artist"></p>
+          </div>
+          <p class="info">
+            Album:
+            <span class="data" id="album_name"></span>
+          </p>
+
+          <p class="info">
+            Released:
+            <span class="data" id="release_date"></span>
+          </p>
+
+          <p class="info">
+            Duration:
+            <span class="data" id="track_duration"></span>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="control-btns">
+      <!-- Buttons -->
+      <button id="back" class="button">Back</button>
+      <button id="backAction" class="button"> &#x2190 &#x2713 </button>
+      <button id="nextAction" class="button"> &#x2713 &#x2192 </button>
+      <button id="next" class="button">Next</button>
+
+
+      
+    </div>
+    <div class="child-playlist">
+          <!-- Select Playlist -->
+    <form id="actionForm" name="actionF">
+
+      <div class="actionContainer">
+        <div class="actionWrapper">
+          <div class="actionItem">
+            <input type="radio" id="add" name="action" value="Track Added" checked>
+            <label for="add">Add</label>
+          </div>
+          <div class="actionItem">
+            <input type="radio" id="a&d" name="action" value="Added & Deleted">
+            <label for="a&d">Add & Delete</label>
+          </div>
+          <div class="actionItem">
+            <input type="radio" id="del" name="action" value="Deleted">
+            <label for="del">Delete</label>
+          </div>
+        </div>
+        <a class="createNew" href="{{ url_for('spotify.createNewPlaylist') }}"
+        >Create New</a>
+      </div>
+
+    <!-- List -->
+    <div class="playlistWrapper">
+      
+      <div class="playlist-container">
+        {% for playlist in playlists %}
+        <div class="playlist-item">
+          <input
+            type="checkbox"
+            name="{{ playlist.name }}"
+            class="child"
+            value="{{ playlist.id }}"
+          />
+          <img src="{{ playlist.url }}" class="playlist_img" />
+          <p class="playlist_name">{{ playlist.name }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+  </form>
+    </div>
+  </div>
+
+  <!-- Spinner -->
+  <div class="spin" id="spin"></div>
+
+  <!-- Toast -->
+  <div id="toast" ></div>
+</div>
+
+<script
+  type="application/javascript"
+  src="{{ url_for('static', filename='js/sort.js') }}"
+></script>
+{% endblock content %}

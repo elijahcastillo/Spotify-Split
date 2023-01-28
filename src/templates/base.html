@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Spotify Split</title>
+
+    <!-- CSS -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/base.css') }}"
+    />
+    {% block head %} {% endblock head %}
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav>
+      <div class="logo">
+        <img src="{{ url_for('static', filename='assets/logo.svg') }}" />
+        <span style="color: grey; font-size: 1.5em">&#x2022;</span>
+        <h2>Spotify Split</h2>
+      </div>
+
+      <div class="hamburg">
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+      </div>
+
+      <div class="links">
+        {% if session["root"] %}
+        <a class="link-item" href="{{ url_for('spotify.createNewPlaylist') }}"
+          >Create Playlist</a
+        >
+        {% endif %} {% if session.token_info %}
+        <a href="{{ url_for('main.logout') }}"
+          ><div class="link-item">Logout</div></a
+        >
+        {% else %}
+        <a class="link-item" href="{{ url_for('main.login') }}">Login</a>
+        {% endif %}
+      </div>
+    </nav>
+
+    <div class="sidebar-mask"></div>
+
+    <!-- Content -->
+    <div class="main-content">{% block content %} {% endblock content %}</div>
+
+    <!-- Footer -->
+    <div class="footer">
+      &copy; 2023 &nbsp <span style="color: #1db954">Spotify</span> &nbsp
+      <span style="color: #eeeeee">Split</span>
+    </div>
+  </body>
+
+  <script>
+    const sidebar = document.querySelector(".links");
+    const hamburg = document.querySelector(".hamburg");
+    const mask = document.querySelector(".sidebar-mask");
+    hamburg.addEventListener("click", () => {
+      sidebar.classList.add("active");
+      mask.classList.add("active");
+    });
+    mask.addEventListener("click", () => {
+      sidebar.classList.remove("active");
+      mask.classList.remove("active");
+    });
+  </script>
+</html>

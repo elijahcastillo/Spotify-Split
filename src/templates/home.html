@@ -1,0 +1,56 @@
+{% extends "base.html" %} {% block head %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/home.css') }}"
+/>
+{% endblock head %} {% block content %}
+
+<div class="container">
+  <div class="home-wrapper">
+    <div class="home-title">
+      <div class="home-header">
+        <h1>Organize your music</h1>
+
+        <img
+          src="{{ url_for('static', filename='assets/music.svg') }}"
+          class="music"
+        />
+      </div>
+      <p>Transfrom the way you listen to music by spliting up your playlists</p>
+    </div>
+    <div class="home-content">
+      <ul>
+        <li>Choose the playlist you want to Split</li>
+        <li>Choose/Create the playists to sort into</li>
+        <li>Analyze and Organize</li>
+      </ul>
+
+      <div class="home-next">
+        {% if session.token_info %}
+        <a href="{{ url_for('spotify.chooseRootPlaylist') }}"
+          ><div class="greenBtn">
+            <img
+              src="{{ url_for('static', filename='assets/spotify.svg') }}"
+              width="30px"
+              height="30px"
+            />
+            Get Started
+          </div></a
+        >
+        {% else %}
+        <a href="{{ url_for('main.login') }}"
+          ><div class="greenBtn">
+            <img
+              src="{{ url_for('static', filename='assets/spotify.svg') }}"
+              width="30px"
+              height="30px"
+            />
+            Login With Spotify
+          </div></a
+        >
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

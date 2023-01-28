@@ -1,0 +1,45 @@
+{% extends "base.html" %} {% block head %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/choosePlaylist.css') }}"
+/>
+{% endblock head %} {% block content %}
+
+<div class="container">
+  <div class="wrapper">
+    <div class="title">
+      <h1>Choose the Playlist you want to Split</h1>
+      <p>Choose one</p>
+    </div>
+
+    <!-- Select Playlist -->
+    <form
+      method="POST"
+      action="{{ url_for('spotify.chooseRootPlaylist') }}"
+      id="root"
+    >
+      <div class="playlist-container">
+        {% for playlist in playlists %}
+        <div class="playlist-item">
+          <input type="radio" name="playlist" value="{{ playlist.id }}" />
+          <img src="{{ playlist.url }}" class="playlist_img" />
+          <p class="playlist_name">{{ playlist.name }}</p>
+        </div>
+        {% endfor %}
+      </div>
+
+      <button type="submit" class="next-btn">Next</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  form = document.getElementById("root");
+
+  form.addEventListener("submit", (e) => {
+    //reset Local storage
+    localStorage.setItem("trackIdx", 0);
+  });
+</script>
+
+{% endblock content %}

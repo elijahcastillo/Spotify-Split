@@ -1,0 +1,81 @@
+.home-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+}
+
+.home-title {
+  color: white;
+  text-align: center;
+  font-family: "Dosis", sans-serif;
+}
+
+.music {
+  width: 70px;
+  height: 70px;
+}
+
+.home-title h1 {
+  font-size: 3.2em;
+  font-weight: 600;
+}
+.home-title p {
+  font-size: 1.8em;
+  margin-top: 10px;
+}
+
+.home-header {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.home-content {
+  color: rgb(177, 177, 177);
+}
+
+.home-content ul li {
+  font-size: 1.7em;
+  margin: 10px 0;
+  font-family: "Dosis", sans-serif;
+}
+
+.home-next {
+  color: white;
+  font-family: "Dosis", sans-serif;
+  font-size: 1.2em;
+  display: flex;
+  justify-content: center;
+
+  margin-top: 50px;
+}
+
+.home-next a {
+  text-decoration: none;
+  color: white;
+}
+
+.greenBtn {
+  width: 200px;
+  height: 45px;
+  border-radius: 15px;
+  background-color: #1db954;
+  cursor: pointer;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  padding: 0 10px;
+}
+
+@media only screen and (max-width: 800px) {
+  /*Big smartphones [426px -> 600px]*/
+
+  .home-header {
+    flex-direction: column;
+    align-items: center;
+  }
+}
