@@ -1,10 +1,11 @@
 from flask import Flask
+import os
 
 
 def create_app():
     app = Flask(__name__)
-    app.config["SECRET_KEY"] = "9rnchw54khs9kdnvmsldw"
-    app.config["SESSION_COOKIE_NAME"] = "Eli's Cookie"
+
+    app.config.from_pyfile('config.py')
     
     #Blueprints
     from src.main.routes import bp as main_bp

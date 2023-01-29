@@ -2,13 +2,12 @@ from flask import session, redirect, url_for
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 import time
-import json
+import os
 
 
-CLIENT_ID = "7b1e63ef41354e6bb461e1e370cb24d5"
-CLIENT_SECRET = "519e8f98610a461daa6e2ae9060dda2c"
-TOKIN_INFO = "token_info"
-
+CLIENT_ID=os.getenv('CLIENT_ID')
+CLIENT_SECRET=os.getenv('CLIENT_SECRET')
+TOKIN_INFO=os.getenv('TOKIN_INFO')
 
 #Check if access token is expired, if so, use refresh token to get new access token
 def get_token():
