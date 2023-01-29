@@ -31,6 +31,10 @@
   gap: 10px;
 }
 
+.track-info {
+  position: relative;
+}
+
 #track_title {
   font-family: "Open Sans", sans-serif;
   font-size: 3em;

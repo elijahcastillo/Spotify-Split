@@ -242,6 +242,7 @@ a {
     z-index: 1000;
     right: 0;
     transform: translateX(1000px);
+    transition: all 0.5s;
   }
 
   .links.active {
