@@ -3,6 +3,9 @@
   rel="stylesheet"
   href="{{ url_for('static', filename='css/choosePlaylist.css') }}"
 />
+
+
+
 {% endblock head %} {% block content %}
 
 <div class="container">
@@ -18,14 +21,23 @@
       action="{{ url_for('spotify.chooseRootPlaylist') }}"
       id="root"
     >
-      <div class="playlist-container">
-        {% for playlist in playlists %}
-        <div class="playlist-item">
-          <input type="radio" name="playlist" value="{{ playlist.id }}" />
-          <img src="{{ playlist.url }}" class="playlist_img" />
-          <p class="playlist_name">{{ playlist.name }}</p>
+      <div class="playlistWrapper">
+        <!-- Search Bar -->
+        <div class="search">
+          <div class="searchContainer"><input type="text" class="searchInp" placeholder="Search" id="search" onkeyup="filterPlaylists()"/> <span class="searchIcon">&#128270</span></div>
+          
         </div>
-        {% endfor %}
+
+        <!-- Playlist List -->
+        <div class="playlist-container">
+          {% for playlist in playlists %}
+          <div class="playlist-item" id="{{ playlist.id }}">
+            <input type="radio" name="playlist" value="{{ playlist.id }}" />
+            <img src="{{ playlist.url }}" class="playlist_img" />
+            <p class="playlist_name">{{ playlist.name }}</p>
+          </div>
+          {% endfor %}
+        </div>
       </div>
 
       <button type="submit" class="next-btn">Next</button>
@@ -33,7 +45,11 @@
   </div>
 </div>
 
-<script>
+<!-- Search JS -->
+<script type="text/javascript">
+  var playlists = {{ playlists|tojson }}
+
+
   form = document.getElementById("root");
 
   form.addEventListener("submit", (e) => {
@@ -41,5 +57,7 @@
     localStorage.setItem("trackIdx", 0);
   });
 </script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/search.js') }}"></script>
+
 
 {% endblock content %}

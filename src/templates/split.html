@@ -7,6 +7,11 @@
   rel="stylesheet"
   href="{{ url_for('static', filename='css/choosePlaylist.css') }}"
 />
+<style>
+  .playlistWrapper{
+    margin-top: 70px;
+  }
+</style>
 {% endblock head %} {% block content %}
 
 <div class="container" style="max-width: 90%">
@@ -75,24 +80,29 @@
         >Create New</a>
       </div>
 
-    <!-- List -->
-    <div class="playlistWrapper">
-      
-      <div class="playlist-container">
-        {% for playlist in playlists %}
-        <div class="playlist-item">
-          <input
-            type="checkbox"
-            name="{{ playlist.name }}"
-            class="child"
-            value="{{ playlist.id }}"
-          />
-          <img src="{{ playlist.url }}" class="playlist_img" />
-          <p class="playlist_name">{{ playlist.name }}</p>
+      <!-- Search -->
+      <div class="playlistWrapper">
+        <div class="search">
+          <div class="searchContainer"><input type="text" class="searchInp" placeholder="Search" id="search" onkeyup="filterPlaylists()"/> <span class="searchIcon">&#128270</span></div>
+        
         </div>
-        {% endfor %}
+
+        <!-- Playlist List -->
+        <div class="playlist-container">
+          {% for playlist in playlists %}
+          <div class="playlist-item" id="{{ playlist.id }}">
+            <input
+              type="checkbox"
+              name="{{ playlist.name }}"
+              class="child"
+              value="{{ playlist.id }}"
+            />
+            <img src="{{ playlist.url }}" class="playlist_img" />
+            <p class="playlist_name">{{ playlist.name }}</p>
+          </div>
+          {% endfor %}
+            </div>
       </div>
-    </div>
 
   </form>
     </div>
@@ -104,6 +114,12 @@
   <!-- Toast -->
   <div id="toast" ></div>
 </div>
+
+<!-- Search JS -->
+<script type="text/javascript">
+  var playlists = {{ playlists|tojson }}
+</script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/search.js') }}"></script>
 
 <script
   type="application/javascript"
