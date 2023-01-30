@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, session, render_template, request, url_for, jsonify
+from flask import Blueprint, redirect, session, render_template, request, url_for, jsonify, flash
 bp = Blueprint("spotify", __name__)
 
 import json
@@ -33,8 +33,13 @@ def chooseRootPlaylist():
     if request.method == "POST":
         #Store root playlist in session
         form = request.form
-        session["root"] = form.get("playlist")
-        return redirect(url_for("spotify.chooseChildrenPlaylists"))
+        rootID = form.get("playlist", None)
+        
+        if not rootID:
+            flash("Please select a Playlist")
+        else:
+            session["root"] = rootID
+            return redirect(url_for("spotify.chooseChildrenPlaylists"))
     
     list_of_playlists = get_All_Playlists()
         
@@ -51,23 +56,27 @@ def chooseChildrenPlaylists():
     if request.method == "POST":
         form = request.form
         
-        children_ids = []
-        children_data = []
-
-        #Get ids for each child playlist
-        for value in form.to_dict(flat=True).values():
-            children_ids.append(value)
+        if not form:
+            flash("Please select Playlist(s)")
+        else:
             
-        #Get data from each playlist
-        for playlist in list_of_playlists:
-            if playlist["id"] in children_ids:
-                children_data.append(playlist)
-                    
-        #Store data in session
-        session["children"] = children_data
-        # session["childrenId"] = children_ids
-        
-        return redirect(url_for("spotify.splitPlaylist"))
+            children_ids = []
+            children_data = []
+
+            #Get ids for each child playlist
+            for value in form.to_dict(flat=True).values():
+                children_ids.append(value)
+                
+            #Get data from each playlist
+            for playlist in list_of_playlists:
+                if playlist["id"] in children_ids:
+                    children_data.append(playlist)
+                        
+            #Store data in session
+            session["children"] = children_data
+            # session["childrenId"] = children_ids
+            
+            return redirect(url_for("spotify.splitPlaylist"))
     
     
 
@@ -90,8 +99,9 @@ def createNewPlaylist():
         form = request.form
         name = form.get("newPlaylistName")
         isPublic = bool(form.get("playlistState"))
-        createPlaylist(name, isPublic)
-        return redirect(url_for("spotify.chooseChildrenPlaylists"))
+        if(name):
+            createPlaylist(name, isPublic)
+            return redirect(url_for("spotify.chooseChildrenPlaylists"))
         
     return render_template("createPlaylist.html")
 

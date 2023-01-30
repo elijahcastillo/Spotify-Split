@@ -112,35 +112,14 @@ class Tracks {
   async previousBatch() {
     let currentIdx = this.getCurrentIdx();
 
-    if (currentIdx % this.BATCH_SIZE == 19) {
+    if (currentIdx % this.BATCH_SIZE == this.BATCH_SIZE - 1) {
       console.log("--------------------- Refetch Prev ---------------------");
-      this.offset -= 20;
+      this.offset -= this.BATCH_SIZE;
       this.setTracks(await getTrackData(this.offset));
     }
   }
 }
 const Track = new Tracks();
-
-function sendToast(type, message, remove = true) {
-  // 0 - BAD   1 - GOOD
-  console.log("HHHH");
-  const toast = document.getElementById("toast");
-
-  toast.textContent = message;
-  if (type) {
-    toast.style.backgroundColor = "green";
-  } else {
-    toast.style.backgroundColor = "red";
-  }
-
-  toast.classList.add("toast_active");
-
-  if (remove) {
-    setTimeout(() => {
-      toast.classList.remove("toast_active");
-    }, 3000);
-  }
-}
 
 function msToTime(duration) {
   var seconds = Math.floor((duration / 1000) % 60),
@@ -223,7 +202,7 @@ function sendAction(endpoint, msg) {
     return sendToast(0, "Please select a Playlist(s)");
   }
 
-  sendToast(0, "Sending Request", false);
+  sendToast(2, "Sending Request", false);
 
   fetch(endpoint, {
     method: "POST",

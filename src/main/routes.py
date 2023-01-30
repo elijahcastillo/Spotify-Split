@@ -2,7 +2,7 @@ from flask import Blueprint, redirect, session, render_template, request, url_fo
 bp = Blueprint("main", __name__)
 
 
-from src.helperFunc import create_Spotify_Oauth, get_token, TOKIN_INFO
+from src.helperFunc import create_Spotify_Oauth, TOKIN_INFO
 
 
 @bp.route("/")

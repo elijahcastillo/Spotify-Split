@@ -68,20 +68,20 @@
       <div class="actionContainer">
         <div class="actionWrapper">
           <div class="actionItem">
-            <input type="radio" id="add" name="action" value="Track Added" checked>
+            <input class="actionInp" type="radio" id="add" name="action" value="Track Added" checked>
             <label for="add">Add</label>
           </div>
           <div class="actionItem">
-            <input type="radio" id="a&d" name="action" value="Added & Deleted">
+            <input class="actionInp" type="radio" id="a&d" name="action" value="Added & Deleted">
             <label for="a&d">Add & Delete</label>
           </div>
           <div class="actionItem">
-            <input type="radio" id="del" name="action" value="Deleted">
+            <input class="actionInp" type="radio" id="del" name="action" value="Deleted">
             <label for="del">Delete</label>
           </div>
         </div>
-        <a class="createNew" href="{{ url_for('spotify.createNewPlaylist') }}"
-        >Create New</a>
+        <!-- <a class="createNew" href="{{ url_for('spotify.createNewPlaylist') }}"
+        >Create New</a> -->
       </div>
 
       <!-- Search -->
@@ -116,6 +116,9 @@
   <!-- Toast -->
   <div id="toast" ></div>
 </div>
+
+<!-- Toast JS -->
+<script type="text/javascript" src="{{ url_for('static', filename='js/toast.js') }}"></script>
 
 <!-- Search JS -->
 <script type="text/javascript">

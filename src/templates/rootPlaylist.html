@@ -43,11 +43,20 @@
       <button type="submit" class="next-btn">Next</button>
     </form>
   </div>
+  <!-- Toast -->
+  <div id="toast" ></div>
 </div>
+
+<!-- Toast JS -->
+<script type="text/javascript" src="{{ url_for('static', filename='js/toast.js') }}"></script>
 
 <!-- Search JS -->
 <script type="text/javascript">
   var playlists = {{ playlists|tojson }}
+  var messages = String({{ get_flashed_messages()|safe }})
+  if(messages){
+    sendToast(0, messages)
+  }
 
 
   form = document.getElementById("root");
