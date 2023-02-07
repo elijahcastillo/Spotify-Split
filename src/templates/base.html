@@ -16,11 +16,13 @@
   <body>
     <!-- Navbar -->
     <nav>
-      <div class="logo">
-        <img src="{{ url_for('static', filename='assets/logo.svg') }}" />
-        <span style="color: grey; font-size: 1.5em">&#x2022;</span>
-        <h2>Spotify Split</h2>
-      </div>
+      <a href="{{ url_for('main.index') }}">
+        <div class="logo">
+          <img src="{{ url_for('static', filename='assets/logo.svg') }}" />
+          <span style="color: grey; font-size: 1.5em">&#x2022;</span>
+          <h2>Spotify Split</h2>
+        </div>
+      </a>
 
       <div class="hamburg">
         <span class="line"></span>
@@ -32,6 +34,9 @@
         {% if session["root"] %}
         <a class="link-item" href="{{ url_for('spotify.createNewPlaylist') }}"
           >Create Playlist</a
+        >
+        <a class="link-item" href="{{ url_for('spotify.chooseRootPlaylist') }}"
+          >Change Root</a
         >
         {% endif %} {% if session.token_info %}
         <a href="{{ url_for('main.logout') }}"

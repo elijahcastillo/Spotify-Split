@@ -45,19 +45,19 @@ class Tracks {
   }
 
   getCurrentURI() {
-    const current_track = this.tracks[this.getCurrentIdx() - this.offset];
+    const current_track = this.getCurrentTrack();
     const URI = current_track.track_uri;
     return URI;
   }
 
-  render() {
-    // console.log("\n ");
-    // console.log(this.tracks, "RENDER TRACKS");
-    const current_track = this.tracks[this.getCurrentIdx() - this.offset];
-    // console.log(this.getCurrentIdx() - this.offset, "INDEX FOR RENDER");
-    // console.log(current_track, "RENDER TRACK");
-    // console.log(this.offset, "RENDER OFFSET");
+  getCurrentTrack() {
+    return this.tracks[this.getCurrentIdx() - this.offset];
+  }
 
+  render() {
+    const current_track = this.getCurrentTrack();
+
+    //Manipulate Data
     const year = current_track.release_date.substring(0, 4);
     const length = msToTime(current_track.duration);
 
@@ -85,6 +85,11 @@ class Tracks {
       return sendToast(0, "No more tracks in playlist");
     }
     localStorage.setItem("trackIdx", currentIdx + 1);
+
+    //if track is deleted, keep going foward
+    if (this.checkDeleted()) {
+      this.nextTrack();
+    }
   }
 
   previousTrack() {
@@ -95,14 +100,30 @@ class Tracks {
       return;
     }
     localStorage.setItem("trackIdx", currentIdx - 1);
+
+    //if track is deleted, keep going back
+    if (this.checkDeleted()) {
+      this.previousTrack();
+    }
+  }
+
+  markDeleted() {
+    let current_track = this.getCurrentTrack();
+    current_track["deleted"] = true;
+  }
+
+  checkDeleted() {
+    //check if curretn track has deleted property
+    const current_track = this.getCurrentTrack();
+    return current_track.hasOwnProperty("deleted") ? true : false;
   }
 
   //Get next batch of tracks
   async nextBatch() {
     let currentIdx = this.getCurrentIdx();
 
+    //Refetch Next
     if (currentIdx % this.BATCH_SIZE == 0) {
-      console.log("--------------------- Refetch Next ---------------------");
       this.offset += this.BATCH_SIZE;
       this.setTracks(await getTrackData(this.offset));
     }
@@ -112,8 +133,8 @@ class Tracks {
   async previousBatch() {
     let currentIdx = this.getCurrentIdx();
 
+    //Refetch Previous
     if (currentIdx % this.BATCH_SIZE == this.BATCH_SIZE - 1) {
-      console.log("--------------------- Refetch Prev ---------------------");
       this.offset -= this.BATCH_SIZE;
       this.setTracks(await getTrackData(this.offset));
     }
@@ -158,7 +179,6 @@ async function main() {
 
   //Get Inital Tracks
   const data = await getTrackData(initOffset);
-  console.log("INIT FETCH: ", data);
   Track.setTracks(data);
   Track.setOffset(initOffset);
   Track.render();
@@ -192,15 +212,6 @@ function sendAction(endpoint, msg) {
   const childIds = getSelectedChildren();
   const trackURI = Track.getCurrentURI();
   const position = Track.getCurrentIdx();
-  console.log(endpoint, childIds.length);
-
-  //No selected playlist for needed actions
-  if (
-    (endpoint == "add" || endpoint == "add-and-delete") &&
-    childIds.length == 0
-  ) {
-    return sendToast(0, "Please select a Playlist(s)");
-  }
 
   sendToast(2, "Sending Request", false);
 
@@ -234,6 +245,7 @@ function checkAndDispatch(action) {
       break;
 
     case "Deleted":
+      Track.markDeleted();
       sendAction("delete_from_root", action);
       break;
   }
@@ -275,6 +287,16 @@ backBtn.addEventListener("click", async (e) => {
 nextAction.addEventListener("click", async (e) => {
   //Get radio btn value from form
   const checked = actionForm.querySelector("input[name=action]:checked");
+  const childIds = getSelectedChildren();
+
+  //No selected playlist for needed actions
+  if (
+    (checked.value == "Track Added" || checked.value == "Added & Deleted") &&
+    childIds.length == 0
+  ) {
+    return sendToast(0, "Please select a Playlist(s)");
+  }
+
   checkAndDispatch(checked.value);
 
   const wrapped = disable(next, e.target);
@@ -284,6 +306,16 @@ nextAction.addEventListener("click", async (e) => {
 backAction.addEventListener("click", async (e) => {
   //Get radio btn value from form
   const checked = actionForm.querySelector("input[name=action]:checked");
+  const childIds = getSelectedChildren();
+
+  //No selected playlist for needed actions
+  if (
+    (checked.value == "Track Added" || checked.value == "Added & Deleted") &&
+    childIds.length == 0
+  ) {
+    return sendToast(0, "Please select a Playlist(s)");
+  }
+
   checkAndDispatch(checked.value);
 
   const wrapped = disable(previous, e.target);
